@@ -15,8 +15,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/login')
 def show_main(request):
-    products = Product.objects.all()
-
+    products = Product.objects.filter(user=request.user)
     context = {
         'name': request.user.username,
         'class': 'PBP F',
@@ -61,7 +60,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your account has been successfully created!')
+            messages.success(request, 'Akun berhasil dibuat!')
             return redirect('main:login')
     context = {'form':form}
     return render(request, 'register.html', context)
@@ -77,7 +76,7 @@ def login_user(request):
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
         else:
-            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+            messages.info(request, 'Maap username atau password salah!')
     context = {}
     return render(request, 'login.html', context)
 
@@ -86,3 +85,20 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def inc_dec_product(request, id, action):
+    product = Product.objects.get(pk=id)
+    if action == 'inc':
+        product.amount += 1
+    elif action == 'dec':
+        product.amount -= 1
+    if product.amount <= 0:
+        product.delete()
+        return redirect('main:show_main')
+    product.save()
+    return redirect('main:show_main')
+
+def delete_product(request, id):
+    product = Product.objects.get(pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))

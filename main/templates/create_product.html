@@ -1,20 +1,111 @@
 {% extends 'base.html' %} 
 
 {% block content %}
-<h1>Add New Product</h1>
+    <div class="container">
+        <header>
+            <h1>Warung Madura</h1>
+            <p class="author">by: arjunaja PBP-F (bukan orang Madura)</p>
+        </header>
+        <h1>Tambah produk baru</h1>
 
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Product"/>
-            </td>
-        </tr>
-    </table>
-</form>
-
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">Nama Barang:</label>
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.price.id_for_label }}">Harga:</label>
+                {{ form.price }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.amount.id_for_label }}">Jumlah Stok:</label>
+                {{ form.amount }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">Deskripsi:</label>
+                {{ form.description }}
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Product" class="add-button"/>
+            </div>
+        </form>
+    <style>
+        /* Gaya CSS yang sama seperti halaman lainnya */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        .author {
+            margin-top: 5px;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .last-login {
+            color: #333;
+        }
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #ff5733;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #e44e2e;
+        }
+        .add-button {
+            padding: 10px 20px;
+            background-color: #ff5733;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .add-button:hover {
+            background-color: #e44e2e;
+        }
+        /* Gaya CSS untuk formulir */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</div>
 {% endblock %}
