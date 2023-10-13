@@ -838,3 +838,225 @@ Semua halaman seperti login, register, main, dll saya implementasikan tema yang 
 ```
 
 kode-kode style tersebut saya dapat dari laman internet dari berbagai sumber. Beberapa kustomisasi juga saya coba sebagai bentuk _trial and error_ pada **situs PBP** di bagian **_Play Ground_**
+
+## tugas 6
+Asynchronous programming dan synchronous programming adalah dua paradigma yang berbeda dalam cara menjalankan operasi atau tugas di dalam sebuah program komputer. Berikut ini adalah perbedaan utama antara keduanya:
+
+1. Synchronous Programming (Program Sinkron):
+   - Dalam synchronous programming, operasi atau tugas dieksekusi secara berurutan, satu per satu. Artinya, program menunggu operasi saat ini selesai sebelum melanjutkan ke operasi berikutnya.
+   - Ini berarti jika ada operasi yang memerlukan waktu yang lama, program akan menjadi lambat dan tidak responsif.
+   - Contoh umum dari synchronous programming adalah pemrograman sekuensial, di mana setiap instruksi dijalankan secara berurutan.
+
+2. Asynchronous Programming (Program Asinkron):
+   - Dalam asynchronous programming, operasi atau tugas dapat dieksekusi secara bersamaan tanpa harus menunggu operasi sebelumnya selesai.
+   - Ini membuat program lebih responsif dan mampu menangani operasi yang memerlukan waktu yang lama tanpa menghentikan eksekusi operasi lainnya.
+   - Asynchronous programming sering digunakan dalam situasi di mana Kita perlu berurusan dengan operasi I/O yang dapat memakan waktu, seperti permintaan HTTP, akses basis data, atau operasi jaringan.
+   - Untuk mengimplementasikan asynchronous programming, Kita biasanya menggunakan fitur seperti callback, promise, async/await, atau future.
+
+Perbandingan Singkat:
+- Synchronous programming cocok untuk tugas yang singkat dan tidak memerlukan banyak operasi I/O atau komputasi yang berat.
+- Asynchronous programming cocok untuk tugas yang memerlukan operasi I/O yang memakan waktu atau komputasi yang berat, sehingga menjaga responsivitas program.
+
+Pilihan antara synchronous dan asynchronous programming akan bergantung pada tugas yang ingin Kita lakukan dalam program Kita. Dalam banyak kasus, campuran keduanya digunakan untuk memaksimalkan efisiensi dan responsivitas program.
+
+Paradigma event-driven programming adalah pendekatan pemrograman di mana program merespons peristiwa (events) yang terjadi, seperti klik mouse, input pengguna, atau permintaan data melalui AJAX (Asynchronous JavaScript and XML). Dalam konteks JavaScript dan penggunaan AJAX, paradigma ini sangat penting karena memungkinkan aplikasi web untuk berinteraksi dengan pengguna secara dinamis dan melakukan permintaan ke server tanpa menghalangi pengguna.
+
+Pada paradigma event-driven programming:
+
+1. Event: Event adalah kejadian atau tindakan yang terjadi dalam program atau lingkungan eksternal, seperti tindakan pengguna di antarmuka pengguna (UI) atau penerimaan data dari server. Event dapat mencakup klik tombol, input keyboard, perubahan status jaringan, atau permintaan HTTP.
+
+2. Event Listener: Event listener adalah kode atau fungsi yang dihubungkan dengan suatu event tertentu. Ketika event terjadi, event listener akan menangani event tersebut dan menjalankan kode yang telah ditentukan.
+
+3. Callback: Dalam konteks AJAX, callback adalah jenis event listener yang sangat umum. Saat Kita membuat permintaan HTTP asynchronous ke server, Kita menyediakan sebuah callback function yang akan dijalankan ketika respons dari server diterima. Ini memungkinkan Kita untuk menangani data yang diterima dan meresponsnya sesuai dengan kebutuhan aplikasi.
+
+4. Non-Blocking: Paradigma event-driven programming memungkinkan program untuk tetap responsif dan tidak terjebak dalam pemrosesan yang memakan waktu, seperti permintaan HTTP yang lambat. Ini terutama berguna dalam aplikasi web yang perlu tetap interaktif saat melakukan operasi jaringan yang memerlukan waktu.
+
+5. Event Queue: Event-driven programming menggunakan konsep event queue, yaitu antrian yang menyimpan event yang menunggu untuk dihandle. Ketika event terjadi, ia dimasukkan ke dalam event queue dan kemudian ditangani oleh event listener atau callback secara berurutan.
+
+Contoh penerapannya dalam JavaScript dan AJAX dalam kode saya adalah sebagai berikut:
+
+```javascript
+async function getProducts() {
+            return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+        }
+        async function refreshProducts() {
+            document.getElementById("product_table").innerHTML = ""
+            const products = await getProducts()
+            let htmlString = `<tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Date Added</th>
+            </tr>`
+            products.forEach((item) => {
+                htmlString += `\n<tr>
+                <td>${item.fields.name}</td>
+                <td>${item.fields.amount}</td>
+                <td>${item.fields.price}</td>
+                <td>${item.fields.description}</td>
+                <td>${item.fields.date_added}</td>
+            </tr>` 
+            })
+            
+            document.getElementById("product_table").innerHTML = htmlString
+        }
+
+        refreshProducts()
+        function addProduct() {
+            fetch("{% url 'main:add_product_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshProducts)
+    
+            document.getElementById("form").reset()
+            return false
+        }
+    
+        document.getElementById("button_add").onclick = addProduct
+```
+
+Dalam contoh di atas, event-driven programming memungkinkan kita merespons tindakan pengguna (klik tombol) dan menerima data dari server (melalui AJAX) secara asynchronous dengan event listeners dan callback functions.
+
+Penerapan asynchronous programming pada AJAX dalam tugas ini adalah mengambil data JSON produk. dalam artian page akan secara otomatis terpudate jika dilakukan create/update.
+
+**Fetch API:**
+1. **Asli dalam JavaScript:** Fetch API adalah bagian dari JavaScript itu sendiri, tidak memerlukan library eksternal. Ini berarti Kita tidak perlu mengunduh atau memasang library tambahan.
+
+2. **Promise-Based:** Fetch API menggunakan promise, yang membuatnya lebih modern dan memungkinkan untuk melakukan asynchronous programming dengan lebih baik. Ini menyederhanakan penanganan respons dan kesalahan.
+
+3. **Lebih Ringan:** Fetch API lebih ringan daripada jQuery karena hanya fokus pada AJAX dan tidak memiliki banyak fitur tambahan yang ada di jQuery.
+
+4. **Mendukung JSON secara Alami:** Fetch API menyederhanakan penanganan data JSON karena mendukung respons JSON secara alami. Kita dapat mengonversi respons JSON langsung ke objek JavaScript tanpa perlu metode tambahan.
+
+**jQuery:**
+1. **Cross-Browser Compatibility:** Salah satu keunggulan terbesar jQuery adalah kemampuannya untuk mengatasi perbedaan kompatibilitas peramban (cross-browser). jQuery merampingkan perbedaan dalam dukungan AJAX antar peramban.
+
+2. **Lebih Lama:** jQuery telah ada dalam dunia pengembangan web untuk waktu yang lama, dan banyak proyek sudah menggunakannya. Ini berarti banyak sumber daya dan plugin tersedia untuk memperluas fungsionalitas.
+
+3. **Lebih Mudah untuk Pemula:** jQuery sering dianggap lebih mudah dipelajari dan digunakan oleh pemula. Ini karena sintaksisnya yang sederhana dan banyak dokumentasi yang tersedia.
+
+4. **Lebih Banyak Fitur Tambahan:** Selain AJAX, jQuery memiliki banyak fitur tambahan, seperti animasi, manipulasi DOM, dan efek visual, yang membuatnya menjadi pilihan yang kuat untuk pengembangan web yang lebih kaya.
+
+Jika dipertimbangkan: 
+
+- **Fetch API** adalah pilihan yang lebih modern, ringan, dan sesuai dengan tren pengembangan web terkini. Jika Kita mengutamakan performa, kejelasan kode, dan penggunaan promise, Fetch API mungkin lebih cocok.
+
+- **jQuery** masih relevan dalam beberapa situasi, terutama jika Kita sudah memiliki proyek yang menggunakan jQuery atau jika Kita perlu mengatasi masalah kompatibilitas peramban yang lebih tua. Selain itu, jika Kita ingin mengambil keuntungan dari fitur tambahan jQuery, seperti animasi atau manipulasi DOM, ini bisa menjadi pilihan yang baik.
+
+Penting untuk menilai kebutuhan proyek Kita, tingkat kemampuan Kita, dan preferensi pribadi Kita saat memutuskan teknologi mana yang akan digunakan dalam pengembangan aplikasi web Kita. Semua teknologi memiliki tempatnya masing-masing tergantung pada situasi pengembangan yang ada.
+
+Untuk mengimplementasikan post dan get pada AJAX, saya membuat fungsi get data by JSON terlebih dahulu dalam file views.py
+```py
+def get_product_json(request):
+    product_item = Product.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', product_item))
+```
+namun tetap diperhatikan, bahwa data yang diambil adalah data dari masing-masing user, bukan data produk keseluruhan
+
+Lalu saya menambahkan fungsi untuk add dan delete product dengan AJAX
+```py
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        amount = request.POST.get("amount")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        user = request.user
+
+        new_product = Product(name=name, amount=amount, price=price, description=description, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+    return HttpResponseNotFound()
+@csrf_exempt
+def delete_product_ajax(request, id):
+    if request.method == 'DELETE':
+        product = Product.objects.get(pk=id)
+        product.delete()
+        return HttpResponse(status=204)
+    return HttpResponseNotFound()
+```
+
+kemudian saya melakukan **routing** pada urls.py dengan menambahkan path kedua fungsi tersebut
+```py
+...
+path('create-product-ajax/', add_product_ajax name='add_product_ajax'),
+path('delete-product-ajax/', delete_product_ajax, name='delete_product_ajax'),
+...
+```
+
+Setelah itu lakukan implementasi button pada main.html
+
+```html
+<script>
+        async function getProducts() {
+            return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+        }
+        async function refreshProducts() {
+            document.getElementById("product_table").innerHTML = ""
+            const products = await getProducts()
+            let htmlString = `<tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Date Added</th>
+            </tr>`
+            products.forEach((item) => {
+                htmlString += `\n<tr>
+                <td>${item.fields.name}</td>
+                <td>${item.fields.amount}</td>
+                <td>${item.fields.price}</td>
+                <td>${item.fields.description}</td>
+                <td>${item.fields.date_added}</td>
+            </tr>` 
+            })
+            
+            document.getElementById("product_table").innerHTML = htmlString
+        }
+
+        refreshProducts()
+        function addProduct() {
+            fetch("{% url 'main:add_product_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshProducts)
+    
+            document.getElementById("form").reset()
+            return false
+        }
+    
+        document.getElementById("button_add").onclick = addProduct
+    
+        function editProduct(pk) {
+        window.location.href = `/edit-product/${pk}`; 
+        }
+    
+        function deleteProduct(pk) {
+        window.location.href = `/delete/${pk}`;  
+        }
+    </script>
+```
+```html
+<button type="button" class="btn btn-primary add-ajax-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Product</button>
+```
+
+jangan lupa untuk menyelaraskan warna agar senada dengan tema page sebelumnya dengan style CSS
+```CSS
+.add-ajax-button {
+            padding: 10px 20px;
+            background-color: #ff5733;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-ajax-button:hover {
+            background-color: #D80032;
+        }
+```
