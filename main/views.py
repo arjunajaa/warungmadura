@@ -1,9 +1,10 @@
 import datetime
+import json
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.shortcuts import render
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from main.forms import ProductForm
 from django.urls import reverse
 from main.models import Product
@@ -129,3 +130,22 @@ def delete_product_ajax(request, id):
         product.delete()
         return HttpResponse(status=204)
     return HttpResponseNotFound()
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_product = Product.objects.create(
+            user = request.user,
+            name = data["name"],
+            price = int(data["price"]),
+            description = data["description"]
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
